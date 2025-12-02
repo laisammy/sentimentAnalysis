@@ -5,7 +5,9 @@ from nltk.corpus import stopwords
 import matplotlib.pyplot as plt
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
-text = open("read.txt", encoding="utf-8").read()
+fileName = "comments_x1wQ3lNJf3c.txt"
+
+text = open(fileName, encoding="utf-8").read()
 lower_case = text.lower()
 cleaned_text = lower_case.translate(str.maketrans('', '', string.punctuation))
 
