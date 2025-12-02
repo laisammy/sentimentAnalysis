@@ -1,12 +1,15 @@
 import string
 from collections import Counter
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
 import matplotlib.pyplot as plt
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 text = open("read.txt", encoding="utf-8").read()
 lower_case = text.lower()
 cleaned_text = lower_case.translate(str.maketrans('', '', string.punctuation))
 
-tokenized_words = cleaned_text.split()
+tokenized_words = word_tokenize(cleaned_text, "english")
 
 stop_words = ["i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself",
               "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself",
@@ -21,7 +24,7 @@ stop_words = ["i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you"
 
 final_words = []
 for word in tokenized_words:
-    if word not in stop_words:
+    if word not in stopwords.words("english"):
         final_words.append(word)
 
 emotion_list = []
@@ -34,6 +37,21 @@ with open('emotions.txt', 'r') as file:
             emotion_list.append(emotion)
 
 w = Counter(emotion_list)
+
+def sentimentAnalyse(sentiment_text):
+    score = SentimentIntensityAnalyzer().polarity_scores(sentiment_text)
+    neg = score["neg"]
+    pos = score["pos"]
+    print(score)
+    if neg > pos:
+        print("Negative Sentiment")
+    elif pos > neg:
+        print("Positive Sentiment")
+    else:
+        print("Neutral Sentiment")
+
+sentimentAnalyse(cleaned_text)
+
 
 fig, axl = plt.subplots()
 axl.bar(w.keys(), w.values())
